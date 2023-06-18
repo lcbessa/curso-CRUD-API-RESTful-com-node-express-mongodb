@@ -1,2 +1,2 @@
 # curso-CRUD-API-RESTful-com-node-express-mongodb
-Este repositório foi criado para colocar em prática os conhecimentos essenciais para o desenvolvimento de um CRUD usando as tecnologias: Node, Express e MongoDB.
+Este repositório foi criado para colocar em prática os conhecimentos essenciais para o desenvolvimento de um CRUD usando as tecnologias: Node, Express e MongoDB do curso [**Tutorial: CRUD API RESTful com: Node + Express +.MongoDb**](https://www.youtube.com/watch?v=qwgDzi8TGco&list=PLb2HQ45KP0WstF2TXsreWRv-WUr5tqzy1&pp=iAQB)  disponível no YouTube da professora Glaucia Lemos.
