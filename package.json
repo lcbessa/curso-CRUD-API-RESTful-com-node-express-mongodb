@@ -17,5 +17,8 @@
     "request": "2.88.2"
   },
   "author": "Luiz Carlos Bessa de Lima",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
