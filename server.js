@@ -16,11 +16,13 @@ var mongoose = require("mongoose");
 var Produto = require("./app/models/produto");
 const produto = require("./app/models/produto");
 
+mongoose.Promise = global.Promise;
+
 // Conexão local MongoDB:
 mongoose.connect("mongodb://127.0.0.1:27017/node-crud-api");
 
 //Configuração da variável app para usar o 'bodyParser':
-app.use(bodyParser.urlencoded({ extend: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Definindo a porta onde será executada a nossa api:
@@ -47,7 +49,7 @@ router.get("/", function (req, res) {
 
 router
   .route("/produtos")
-  /* Método: Criar Produto (acessar através: http://localhost:8000/api/produtos)*/
+  /* 1) Método: Criar Produto (acessar através: http://localhost:8000/api/produtos)*/
   .post((req, res) => {
     var produto = new Produto();
 
@@ -65,6 +67,7 @@ router
         res.send("Erro ao tentar salvar o Produto..." + error);
       });
   })
+  /* 2) Método: Selecionar Todos Produtos (acessar através: http://localhost:8000/api/produtos)*/
   .get((req, res) => {
     produto
       .find()
@@ -72,7 +75,56 @@ router
         res.json(produtos);
       })
       .catch((error) => {
-        res.send("Erro ao tentar listar todos os produtos!" + error);
+        res.send("Erro ao tentar listar todos os produtos! " + error);
+      });
+  });
+
+// Rotas que irão terminar em '/produtos/:produto_id (servir tanto para : GET, PUT & DELETE: id)
+
+router
+  .route("/produtos/:produto_id")
+  /* 3) Método: Selecionar Produto por Id: (acessar através: http://localhost:8000/api/produtos/:produto_id)*/
+  .get((req, res) => {
+    Produto.findById(req.params.produto_id)
+      .then((produto) => {
+        res.json(produto);
+      })
+      .catch((error) => {
+        res.send("Id do Produto não emcontrado... " + error);
+      });
+  })
+  /* 4) Método: Atualizar Produto por Id: (acessar através: http://localhost:8000/api/produtos/:produto_id)*/
+  .put((req, res) => {
+    console.log(req);
+    Produto.findById(req.params.produto_id)
+      .then((produto) => {
+        produto.nome = req.body.nome;
+        produto.preco = req.body.preco;
+        produto.descricao = req.body.descricao;
+
+        produto
+          .save()
+          .then(() => {
+            res.json({ message: "Produto atualizado com sucesso!" });
+          })
+          .catch((error) => {
+            res.send("Erro ao atualizar o produto... " + error);
+          });
+      })
+      .catch((error) => {
+        res.send("Id do produto não encontrado...: " + error);
+      });
+  })
+  /* 5) Método: Deletar Produto por Id: (acessar através: http://localhost:8000/api/produtos/:produto_id)*/
+  .delete((req, res) => {
+    Produto.deleteOne({
+      _id: req.params.produto_id,
+    })
+      .then(() => {
+        res.json({ message: "Produto Excluido com Sucesso!" });
+      })
+      .catch((error) => {
+        res.send("Id do Produto não encontrado... " + error);
       });
   });
 app.use("/api", router);
